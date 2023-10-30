@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.uplus_client.uplus_java.Service.MyService;
+import com.uplus_client.uplus_java.Service.AdmitService;
+import com.uplus_client.uplus_java.Service.DischargeService;
+import com.uplus_client.uplus_java.Service.OrderService;
 
 @CrossOrigin
 @RestController
@@ -14,7 +16,13 @@ import com.uplus_client.uplus_java.Service.MyService;
 public class MyController {
 
     @Autowired
-    MyService myService;
+    AdmitService admitService;
+
+    @Autowired
+    DischargeService dischargeService;
+
+    @Autowired
+    OrderService orderService;
 
     public MyController(){
 
@@ -22,26 +30,26 @@ public class MyController {
     @PostMapping("/admit")
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onAdmitController(){
-        return myService.onAdmitService();
+        return admitService.onAdmitService();
     }
     @PostMapping("/discharge")
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onDischargeController(){
-        return myService.onDischargeService();
+        return dischargeService.onDischargeService();
     }
     @PostMapping("/monitorInterface")
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onMonitorInterfaceController(){
-        return myService.OnMonitorInterfaceService();
+        return admitService.OnMonitorInterfaceService();
     }
     @PostMapping("/order")
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onOrderController(){
-        return myService.OnOrderService();
+        return orderService.OnOrderService();
     }
     @GetMapping("/summary")
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onSummaryOrderController(){
-        return myService.OnSummaryOrderService();
+        return admitService.OnSummaryOrderService();
     }
 }
