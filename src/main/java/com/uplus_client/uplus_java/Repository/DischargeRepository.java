@@ -33,7 +33,7 @@ public class DischargeRepository {
                         "bm.bed_number as room_number, " +
                         "bm.base_service_point_id as ward, " +
                         "v.financial_discharge as discharge_notify, " +
-                        "v.financial_discharge_date as discharge_date " +
+                        "v.financial_discharge_date as discharge_date, " +
                         "v.financial_discharge_time as discharge_time " +
                         "FROM patient " +
                         "INNER JOIN visit v " +

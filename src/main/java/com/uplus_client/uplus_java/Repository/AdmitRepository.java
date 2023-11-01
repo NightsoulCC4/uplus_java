@@ -72,7 +72,8 @@ public class AdmitRepository {
                         "INNER JOIN base_service_point bsp " + 
                         "ON bsp.base_department_id = a.base_department_id " +
                         "INNER JOIN ipd_attending_physician iap " +
-                        "ON iap.admit_id = a.admit_id ";
+                        "ON iap.admit_id = a.admit_id " +
+                        "LIMIT 100";
 
         try {
             con = DriverManager.getConnection(hisDatasourceJdbcUrl, hisDatasourceUsername, hisDatasourcePassword);
@@ -113,6 +114,7 @@ public class AdmitRepository {
                 lnkMap.put("diet_type", rs.getString("diet_type"));
                 lnkMap.put("category_of_food", rs.getString("category_of_food"));
                 lnkMap.put("doctor_name", rs.getString("doctor_name"));
+                
                 list.add(lnkMap);
             }
 

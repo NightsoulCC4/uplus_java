@@ -27,7 +27,7 @@ public class OrderRepository {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String query = "SELECT format_hn(hn), " +
+        String query = "SELECT format_hn(patient.hn) as hn_number, " +
                         "bm.bed_number as room_number, " +
                         "bm.base_service_point_id as ward, " +
                         "npn.base_nt_type_id as diet_type, " +
@@ -42,12 +42,12 @@ public class OrderRepository {
                         "no2.dispense_time as order_time " +
                         "FROM patient " +
                         "INNER JOIN visit v " + 
-                        "ON patient_id = v.patient_id " + 
+                        "ON patient.patient_id = v.patient_id " + 
                         "INNER JOIN vital_sign_opd vso " + 
                         "ON v.visit_id  = vso.visit_id " + 
                         "INNER JOIN nt_patient_nutrition npn " +
                         "ON npn.patient_id = patient.patient_id " +
-                        "INNER JOIN nt_allergy na" + 
+                        "INNER JOIN nt_allergy na " + 
                         "ON na.nt_patient_nutrition_id = npn.nt_patient_nutrition_id " +
                         "INNER JOIN diagnosis_icd10 di " +
                         "ON di.visit_id = v.visit_id " +
@@ -59,7 +59,8 @@ public class OrderRepository {
                         "ON iap.admit_id = a.admit_id " +
                         "INNER JOIN nt_order no2 " +
                         "ON no2.visit_id = v.visit_id " +
-                        "WHERE v.financial_discharge = '1'";
+                        "WHERE v.financial_discharge = '1' " +
+                        "LIMIT 100";
 
         try {
             con = DriverManager.getConnection(hisDatasourceJdbcUrl, hisDatasourceUsername, hisDatasourcePassword);

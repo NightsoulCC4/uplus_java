@@ -1,6 +1,6 @@
 package com.uplus_client.uplus_java.Controller;
 
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +29,12 @@ public class MyController {
     }
     @PostMapping("/admit")
     @ResponseBody
-    public ResponseEntity<LinkedHashMap<String, String>> onAdmitController(){
+    public ResponseEntity<Map<String, Object>> onAdmitController(){
         return admitService.onAdmitService();
     }
     @PostMapping("/discharge")
     @ResponseBody
-    public ResponseEntity<LinkedHashMap<String, String>> onDischargeController(){
+    public ResponseEntity<Map<String, Object>> onDischargeController(){
         return dischargeService.onDischargeService();
     }
     @PostMapping("/monitorInterface")
@@ -44,7 +44,7 @@ public class MyController {
     }
     @PostMapping("/order")
     @ResponseBody
-    public ResponseEntity<LinkedHashMap<String, String>> onOrderController(){
+    public ResponseEntity<Map<String, Object>> onOrderController(){
         return orderService.OnOrderService();
     }
     @GetMapping("/summary")

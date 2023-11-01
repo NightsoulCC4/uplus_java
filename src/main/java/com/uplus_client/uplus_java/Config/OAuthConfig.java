@@ -1,9 +1,12 @@
 /* package com.uplus_client.uplus_java.Config;
 
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 
 import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 
@@ -22,7 +25,7 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     @Value("${security.oauth2.client.scope}")
     private String scope;
 
-    @Value("${security.oauth2.client.access-token-validity-secords}")
+    @Value("${security.oauth2.client.access-token-validity-seconds}")
     private int accessTokenValiditySeconds;
 
     private final static Logger logger = LogManager.getLogger(OAuthConfig.class);
@@ -30,14 +33,20 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
-        logger.info("\n client-id: " + client_id + "\n client-secret: " + client_secret + "\n grant_types: " + grant_types + "\n scope: " + scope + "\n validateTime: " + accessTokenValiditySeconds );
+        logger.info("\n client-id: " + client_id + "\n client-secret: " + client_secret + "\n grant_types: "
+                + grant_types + "\n scope: " + scope + "\n validateTime: " + accessTokenValiditySeconds);
 
         clients.inMemory()
-            .withClient(client_id)
-            .secret(client_secret)
-            .authorizedGrantTypes(grant_types)
-            .scopes(scope)
-            .accessTokenValiditySeconds(accessTokenValiditySeconds);
+                .withClient(client_id)
+                .secret(client_secret)
+                .authorizedGrantTypes(grant_types)
+                .scopes(scope)
+                .accessTokenValiditySeconds(accessTokenValiditySeconds);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
  */
