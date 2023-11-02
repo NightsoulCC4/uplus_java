@@ -3,6 +3,7 @@ package com.uplus_client.uplus_java.Controller;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,5 +52,10 @@ public class MyController {
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onSummaryOrderController(){
         return admitService.OnSummaryOrderService();
+    }
+    @GetMapping("/hello")
+    @ResponseBody
+    public ResponseEntity<String> Hello(){
+        return ResponseEntity.status(HttpStatus.OK).body("Hello World");
     }
 }

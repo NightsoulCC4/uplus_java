@@ -46,7 +46,7 @@ public class OrderService {
 
         try {
             // Declare URL to request to the endpoint server.
-            URL url = new URL(endpoint + "discharge");
+            URL url = new URL(endpoint + "order");
 
             // Get data from database.
             List<LinkedHashMap<String, Object>> result = orderRepository.getOrderDataFromDB();
