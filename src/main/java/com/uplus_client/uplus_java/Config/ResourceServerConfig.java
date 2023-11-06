@@ -15,19 +15,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/uplus_example/client/admit").hasRole("ADMIN")
-                .antMatchers("/uplus_example/client/hello").hasRole("USER")
-                .and().httpBasic();
+        http.authorizeRequests()
+            .antMatchers("/uplus_example/client/admit").hasRole("ADMIN")
+            .antMatchers("/uplus_example/client/hello").hasRole("USER")
+            .and().httpBasic();
     }
-
-
-/*     @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/uplus_example/client/admit", "/uplus_example/client/discharge")
-                .access("#oauth2.hasScope('read') and #oauth2.clientName == 'client1'"); // Requires authentication for path1.
-    } */
 }

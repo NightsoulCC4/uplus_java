@@ -16,4 +16,10 @@ public final class Utility {
     public static String getTimezone(String date, String time){
         return date + "T" + time + "Z";
     }
+    public static boolean isDateNull(String date){
+        if(date == null)
+            return true;
+        else
+            return false;
+    }
 }

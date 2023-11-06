@@ -51,6 +51,8 @@ public class DischargeService {
             // Get data from database.
             List<LinkedHashMap<String, Object>> result = dischargeRepository.getDischargeDataFromDB();
 
+            logger.info("\nurl: " + url);
+
             // Prepare data for sending to the server.
             String reqBody = gson.toJson(result);
 

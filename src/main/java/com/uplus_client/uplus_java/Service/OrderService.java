@@ -54,6 +54,8 @@ public class OrderService {
             // Prepare data for sending to the server.
             String reqBody = gson.toJson(result);
 
+            logger.info("\nurl: " + url);
+
             // Use OkHttpClient to get request from the server.
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();

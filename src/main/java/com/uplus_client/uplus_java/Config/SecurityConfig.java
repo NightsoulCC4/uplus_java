@@ -26,14 +26,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    /* @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername(username)
-                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(password))
-                .authorities(authorities).build());
-        return manager;
-    } */
-
 }

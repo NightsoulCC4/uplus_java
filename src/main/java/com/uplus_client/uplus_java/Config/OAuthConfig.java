@@ -47,12 +47,11 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     @Value("${security.oauth2.client.access-token-validity-seconds}")
     private int accessTokenValiditySeconds;
 
+    // @Value("${security.oauth2}")
+
     private final static Logger logger = LogManager.getLogger(OAuthConfig.class);
 
     private AuthenticationManager authenticationManager;
-
-    /* @Autowired
-    private UserDetailsService userDetailsService; */
 
     @Autowired
     public OAuthConfig(AuthenticationManager authenticationManager) {
@@ -61,7 +60,6 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        // endpoints.authenticationManager(authenticationManager).userDetailsService(userDetailsService);
         endpoints.authenticationManager(authenticationManager);
     }
 

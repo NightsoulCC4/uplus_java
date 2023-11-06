@@ -29,51 +29,72 @@ public class AdmitRepository {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String query = "SELECT format_hn(patient.hn) as hn_number, " +
-                        "patient.prename, " +
-                        "patient.firstname, " + 
-                        "patient.lastname, " +
-                        "patient.birthdate as date_of_birth, " +
-                        "vso.height, " +
-                        "vso.weight, " +
-                        "patient.fix_nationality_id as nationality, " +
-                        "patient.fix_race_id as citizenship, " +
-                        "patient.religion, " +
-                        "patient.pid as id_number, " +
-                        "patient.fix_occupation_id as occupation, " +
-                        "patient.mobile as tel_no, " +
-                        "patient.blood_group as blood_type, " +
-                        "na.base_nt_allergy_id as allergy, " +
-                        "di.beginning_diagnosis as diagnosis, " +
-                        "a.admit_date as date_of_admission, " +
-                        "a.admit_time, " +
-                        "bm.bed_number as room_number, " +
-                        "bsp.base_site_branch_id as building, " +
-                        "bm.base_service_point_id as ward, " +
-                        "npn.extra_note as remark, " +
-                        "npn.base_nt_type_id as diet_type, " +
-                        "npn.base_nt_food_category_id as category_of_food, " +
-                        "iap.employee_id as doctor_name " +
-                        "FROM patient " +
-                        "INNER JOIN visit v " + 
-                        "ON patient.patient_id = v.patient_id " +
-                        "INNER JOIN vital_sign_opd vso " +
-                        "ON v.visit_id  = vso.visit_id " +
-                        "INNER JOIN nt_patient_nutrition npn " + 
-                        "ON npn.patient_id = patient.patient_id " +
-                        "INNER JOIN nt_allergy na " +
-                        "ON na.nt_patient_nutrition_id = npn.nt_patient_nutrition_id " +
-                        "INNER JOIN diagnosis_icd10 di " +
-                        "ON di.visit_id = v.visit_id " +
-                        "INNER JOIN admit a " +
-                        "ON a.patient_id = patient.patient_id " +
-                        "INNER JOIN bed_management bm " +
-                        "ON bm.admit_id = a.admit_id " +
-                        "INNER JOIN base_service_point bsp " + 
-                        "ON bsp.base_department_id = a.base_department_id " +
-                        "INNER JOIN ipd_attending_physician iap " +
-                        "ON iap.admit_id = a.admit_id " +
-                        "LIMIT 100";
+        String query = "SELECT " +
+                            "DISTINCT " +
+                            "format_hn(patient.hn) AS hn_number, " +
+                            "patient.prename, " +
+                            "patient.firstname, " + 
+                            "patient.lastname, " +
+                            "patient.birthdate AS date_of_birth, " +
+                            "vital_sign_opd.height, " +
+                            "vital_sign_opd.weight, " +
+                            "patient.fix_nationality_id AS nationality, " + 
+                            "patient.fix_race_id AS citizenship, " +
+                            "patient.religion, " +
+                            "patient.pid AS id_number, " +
+                            "patient.fix_occupation_id AS occupation, " +
+                            "patient.mobile AS tel_no, " +
+                            "patient.blood_group AS blood_type, " +
+                            "nt_allergy.base_nt_allergy_id AS allergy, " +
+                            "diagnosis_icd10.beginning_diagnosis AS diagnosis, " +
+                            "admit.admit_date AS date_of_admission, " +
+                            "admit.admit_time, " +
+                            "bed_management.bed_number AS room_number, " +
+                            "base_service_point.base_site_branch_id AS building, " +
+                            "bed_management.base_service_point_id AS ward, " +
+                            "nt_patient_nutrition.extra_note AS remark, " +
+                            "nt_patient_nutrition.base_nt_type_id AS diet_type, " +
+                            "nt_patient_nutrition.base_nt_food_category_id AS category_of_food, " +
+                            "ipd_attending_physician.employee_id AS doctor_name " +
+                        "FROM " +
+                            "patient " +
+                        "INNER JOIN visit visit ON " +
+                            "patient.patient_id = visit.patient_id " +
+                        "INNER JOIN public.vital_sign_opd vital_sign_opd ON " +
+                            "visit.visit_id = vital_sign_opd.visit_id " +
+                        "INNER JOIN public.nt_patient_nutrition nt_patient_nutrition ON " +
+                            "nt_patient_nutrition.patient_id = patient.patient_id " +
+                        "INNER JOIN nt_allergy nt_allergy ON " +
+                            "nt_allergy.nt_patient_nutrition_id = nt_patient_nutrition.nt_patient_nutrition_id " +
+                        "INNER JOIN diagnosis_icd10 diagnosis_icd10 ON " +
+                            "diagnosis_icd10.visit_id = visit.visit_id " +
+                        "INNER JOIN admit admit ON " +
+                            "admit.patient_id = patient.patient_id " +
+                        "INNER JOIN bed_management bed_management ON " +
+                            "bed_management.admit_id = admit.admit_id " +
+                        "INNER JOIN base_service_point base_service_point ON " +
+                            "base_service_point.base_department_id = admit.base_department_id " +
+                        "INNER JOIN ipd_attending_physician ipd_attending_physician ON " +
+                            "ipd_attending_physician.admit_id = admit.admit_id " +
+                        "WHERE " +
+                            "(vital_sign_opd.height, " +
+                            "vital_sign_opd.weight, " +
+                            "vital_sign_opd.measure_date) " + 
+                            "IN ( " +
+                            "SELECT " +
+                                "height, " +
+                                "weight, " +
+                                "max(measure_date) " +
+                            "FROM " +
+                                "public.vital_sign_opd " +
+                            "WHERE " +
+                                "height <> '' " +
+                                "AND weight <> '' " +
+                            "GROUP BY " +
+                                "height, " +
+                                "weight) " +
+                        "ORDER BY " +
+                            "admit.admit_date DESC; ";
 
         try {
             con = DriverManager.getConnection(hisDatasourceJdbcUrl, hisDatasourceUsername, hisDatasourcePassword);
