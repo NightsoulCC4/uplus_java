@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 
 @Configuration
 @EnableAuthorizationServer
-public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Value("${security.oauth2.client.client-id}")
     private String client_id;
@@ -47,14 +47,30 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     @Value("${security.oauth2.client.access-token-validity-seconds}")
     private int accessTokenValiditySeconds;
 
-    // @Value("${security.oauth2}")
+    @Value("${spring.security.user.name.client_1}")
+    private String user_1;
 
-    private final static Logger logger = LogManager.getLogger(OAuthConfig.class);
+    @Value("${spring.security.user.password.client_1}")
+    private String password_1;
+
+    @Value("${spring.security.user.name.client_2}")
+    private String user_2;
+
+    @Value("${spring.security.user.password.client_2}")
+    private String password_2;
+
+    @Value("${spring.security.user.authorities.role_1}")
+    private String role_1;
+
+    @Value("${spring.security.user.authorities.role_2}")
+    private String role_2;
+
+    private final static Logger logger = LogManager.getLogger(AuthorizationServerConfig.class);
 
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    public OAuthConfig(AuthenticationManager authenticationManager) {
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -73,9 +89,9 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-          .withUser("apple").password("{noop}banana").roles("ADMIN")
+          .withUser(user_1).password(passwordEncoder().encode(password_1)).roles(role_1)
           .and()
-          .withUser("newUsername").password("{noop}newPassword").roles("USER");
+          .withUser(user_2).password(passwordEncoder().encode(password_2)).roles(role_2);
     }
 
     @Override
@@ -88,17 +104,16 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
         // If you want to encode the client_secret, you can use passwordEncoder() function nor insert "{noop}" at the front.
         clients.inMemory()
                 .withClient(client_id)
-                // .secret(passwordEncoder().encode(client_secret))
-                .secret("{noop}" + client_secret)
+                .secret(passwordEncoder().encode(client_secret))
                 .authorizedGrantTypes(password, authoization_code, refresh_token)
                 .scopes(read, write)
-                .accessTokenValiditySeconds(accessTokenValiditySeconds)
-                .and()
+                .accessTokenValiditySeconds(accessTokenValiditySeconds);
+                /* .and()
                 .withClient("client2")
                 .secret("{noop}secret2")
                 .authorizedGrantTypes(client_credentials, refresh_token, password)
                 .scopes(read, write)
-                .accessTokenValiditySeconds(300);
+                .accessTokenValiditySeconds(300); */
     }
 
     @Bean
