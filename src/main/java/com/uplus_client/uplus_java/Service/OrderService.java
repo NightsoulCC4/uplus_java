@@ -79,7 +79,10 @@ public class OrderService {
 
                 // Convert data from server to json form.
                 response_data = gson.fromJson(server_response.body().string(), type);
-            }
+
+                logger.info("\n----------SUCCESSFUL----------");
+            } else
+                logger.info("\n----------FAILED----------");
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

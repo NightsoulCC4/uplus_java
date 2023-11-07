@@ -16,8 +16,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/uplus_example/client/admit").hasRole("ADMIN")
-            .antMatchers("/uplus_example/client/hello").hasRole("USER")
+            .antMatchers("/uplus_example/client/order").hasRole("ADMIN")
+            // .antMatchers("/uplus_example/client/hello").hasRole("USER")
             .and().httpBasic();
     }
 }

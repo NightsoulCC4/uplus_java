@@ -108,7 +108,6 @@ public class DischargeRepository {
                 System.out.println(ex);
             }
         }
-
         return list;
     }
 }
