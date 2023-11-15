@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.uplus_client.uplus_java.Repository.AdmitRepository;
+import com.uplus_client.uplus_java.Repository.H2.H2Repository;
+import com.uplus_client.uplus_java.Repository.IMED.AdmitRepository;
+import com.uplus_client.uplus_java.Utility.ProviderUtility;
 
 import okhttp3.*;
 
@@ -33,6 +35,12 @@ public class AdmitService {
     @Autowired
     AdmitRepository admitRepository;
 
+    @Autowired
+    H2Repository h2Repository;
+
+    @Autowired
+    ProviderUtility providerUility;
+
     public AdmitService() {
 
     }
@@ -43,23 +51,25 @@ public class AdmitService {
         Gson gson = new Gson();
         Response server_response = null;
         Map<String, Object> response_data = null;
-
+        
         try {
             // Declare URL to request to the endpoint server.
             URL url = new URL(endpoint + "admit");
 
             // Get data from database.
             List<LinkedHashMap<String, Object>> result = admitRepository.getAdmitDataFromDB();
+            String backup_data = h2Repository.getBackupData();
 
             // Prepare data for sending to the server.
             String reqBody = gson.toJson(result);
 
             logger.info("\nurl: " + url);
 
+            providerUility.provider(url.toString(), reqBody, "POST");
+
             // Use OkHttpClient to get request from the server.
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
-            // MediaType mediaType = MediaType.parse("text/plain");
             RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("hospital_id", hospital_id)
                     .addFormDataPart("data", (String) reqBody)
@@ -68,11 +78,18 @@ public class AdmitService {
                     .url(url)
                     .method("POST", body)
                     .build();
-            // Receieve response from the server.
-            server_response = client.newCall(request).execute();
 
+            // Get back up data for comparing with i-med data.
+            
+
+            // Are back_up data and req_data match?
+            if (!backup_data.equals(reqBody)) 
+                // Receieve response from the server.
+                server_response = client.newCall(request).execute();
+            
+            
             // Check the response status when success.
-            if (server_response.isSuccessful()) {
+            if (server_response != null && server_response.isSuccessful()) {
                 // Declare type for specific type in json form.
                 Type type = new TypeToken<Map<String, Object>>() {
                 }.getType();
@@ -80,8 +97,11 @@ public class AdmitService {
                 // Convert data from server to json form.
                 response_data = gson.fromJson(server_response.body().string(), type);
 
+                // Save into h2 database if the request successful.
+                h2Repository.putBackupData(reqBody);
+
                 logger.info("\n----------SUCCESSFUL----------");
-            }else
+            } else
                 logger.info("\n----------FAILED----------");
 
         } catch (MalformedURLException e) {
@@ -95,51 +115,5 @@ public class AdmitService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(response_data);
-    }
-
-    public ResponseEntity<LinkedHashMap<String, String>> OnMonitorInterfaceService() {
-        ResponseEntity<LinkedHashMap<String, String>> response = null;
-        try {
-            URL url = new URL(endpoint + "monitorInterface");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            Map<String, String> formData = new HashMap<>();
-            formData.put("hospital_id", (String) "String: hospital_id");
-            formData.put("data", "String");
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response;
-    }
-
-    public ResponseEntity<LinkedHashMap<String, String>> OnSummaryOrderService() {
-        ResponseEntity<LinkedHashMap<String, String>> response = null;
-        try {
-            URL url = new URL(endpoint + "summary");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            Map<String, String> formData = new HashMap<>();
-            formData.put("hospital_id", (String) "String: hospital_id");
-            formData.put("data", "String");
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return response;
     }
 }

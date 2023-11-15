@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.uplus_client.uplus_java.Repository.DischargeRepository;
+import com.uplus_client.uplus_java.Repository.IMED.DischargeRepository;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -38,6 +38,10 @@ public class DischargeService {
 
     @Autowired
     DischargeRepository dischargeRepository;
+
+    public DischargeService(){
+
+    }
 
     public ResponseEntity<Map<String, Object>> onDischargeService() {
         Gson gson = new Gson();

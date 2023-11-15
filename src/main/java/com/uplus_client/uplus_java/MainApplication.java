@@ -1,6 +1,6 @@
 package com.uplus_client.uplus_java;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,14 +31,12 @@ public class MainApplication {
 
 	@Scheduled(fixedDelayString = "${scheduled_repeat_time}")
 	public void SchedulingSendData() throws InterruptedException {
-		logger.info("\nSent data at: " + LocalDate.now());
+		logger.info("\nSent data at: " + LocalDateTime.now());
 		try {
 			admitService.onAdmitService();
 			dischargeService.onDischargeService();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

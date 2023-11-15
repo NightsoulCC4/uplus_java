@@ -1,4 +1,4 @@
-package com.uplus_client.uplus_java.Repository;
+package com.uplus_client.uplus_java.Repository.IMED;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,12 +16,20 @@ import com.uplus_client.uplus_java.Utility.Utility;
 
 @Repository
 public class DischargeRepository {
+
     @Value("${his.datasource.jdbc-url}")
     private String hisDatasourceJdbcUrl;
+
     @Value("${his.datasource.username}")
     private String hisDatasourceUsername;
+
     @Value("${his.datasource.password}")
     private String hisDatasourcePassword;
+
+    public DischargeRepository(){
+        
+    }
+
     public List<LinkedHashMap<String, Object>> getDischargeDataFromDB(){
         List<LinkedHashMap<String, Object>> list = null;
         LinkedHashMap<String, Object> lnkMap = null;

@@ -1,13 +1,16 @@
 package com.uplus_client.uplus_java.Service;
 
-import java.io.*;
+import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.*;
-import java.util.*;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.uplus_client.uplus_java.Repository.IMED.OrderRepository;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -24,39 +26,32 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @Service
-public class OrderService {
+public class ProviderTokenService {
+
     @Value("${endpoint}")
     private String endpoint;
 
-    @Value("${authpoint}")
-    private String authpoint;
-
-    @Value("${hospital_id}")
-    private String hospital_id;
-
-    Logger logger = LogManager.getLogger(OrderService.class);
-
-    @Autowired
-    OrderRepository orderRepository;
-
-    public OrderService(){
+    Logger logger = LogManager.getLogger(ProviderTokenService.class);
+    
+    public ProviderTokenService(){
 
     }
 
-    public ResponseEntity<Map<String, Object>> OnOrderService() {
+    public ResponseEntity<Map<String, Object>> requestToken(){
+
         Gson gson = new Gson();
         Response server_response = null;
         Map<String, Object> response_data = null;
 
         try {
             // Declare URL to request to the endpoint server.
-            URL url = new URL(endpoint + "order");
+            URL url = new URL(endpoint + "oauth/token");
 
             // Get data from database.
-            List<LinkedHashMap<String, Object>> result = orderRepository.getOrderDataFromDB();
+            // List<LinkedHashMap<String, Object>> result = admitRepository.getAdmitDataFromDB();
 
             // Prepare data for sending to the server.
-            String reqBody = gson.toJson(result);
+            // String reqBody = gson.toJson(result);
 
             logger.info("\nurl: " + url);
 
@@ -65,8 +60,8 @@ public class OrderService {
                     .build();
             // MediaType mediaType = MediaType.parse("text/plain");
             RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("hospital_id", hospital_id)
-                    .addFormDataPart("data", (String) reqBody)
+                    .addFormDataPart("hospital_id", "hospital_id")
+                    .addFormDataPart("data", (String) "reqBody")
                     .build();
             Request request = new Request.Builder()
                     .url(url)
@@ -85,7 +80,7 @@ public class OrderService {
                 response_data = gson.fromJson(server_response.body().string(), type);
 
                 logger.info("\n----------SUCCESSFUL----------");
-            } else
+            }else
                 logger.info("\n----------FAILED----------");
 
         } catch (MalformedURLException e) {
@@ -98,6 +93,8 @@ public class OrderService {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+
         return ResponseEntity.status(HttpStatus.OK).body(response_data);
-    }
+    } 
+
 }

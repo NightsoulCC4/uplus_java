@@ -1,4 +1,4 @@
-package com.uplus_client.uplus_java.Repository;
+package com.uplus_client.uplus_java.Repository.IMED;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,12 +16,20 @@ import com.uplus_client.uplus_java.Utility.Utility;
 
 @Repository
 public class OrderRepository {
+
     @Value("${his.datasource.jdbc-url}")
     private String hisDatasourceJdbcUrl;
+
     @Value("${his.datasource.username}")
     private String hisDatasourceUsername;
+
     @Value("${his.datasource.password}")
     private String hisDatasourcePassword;
+
+    public OrderRepository(){
+        
+    }
+
     public List<LinkedHashMap<String, Object>> getOrderDataFromDB(){
         List<LinkedHashMap<String, Object>> list = null;
         LinkedHashMap<String, Object> lnkMap = null;
@@ -88,7 +96,7 @@ public class OrderRepository {
                 lnkMap.put("allergy", rs.getString("allergy"));
                 lnkMap.put("foodType", rs.getString("foodType"));
                 lnkMap.put("orderItemStatus", rs.getString("orderItemStatus"));
-                lnkMap.put("order_date", Utility.isDateNull(rs.getString("order_date")) ? "dd/mm/yyyy" : Utility.getTimezone(rs.getString("order_date"), rs.getString("order_time")));
+                lnkMap.put("order_date", Utility.isNotNull(rs.getString("order_date")) ? Utility.getTimezone(rs.getString("order_date"), rs.getString("order_time")) : Utility.getDateFormat());
 
                 list.add(lnkMap);
             }

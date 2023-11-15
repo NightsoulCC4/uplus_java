@@ -15,9 +15,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/uplus_example/client/order").hasRole(role_1)
-            // .antMatchers("/uplus_example/client/hello").hasRole("USER")
-            .and().httpBasic();
+
+        // For using h2-console on your web browser. You need to disable csrf and header frameOptions.
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
+
+        // You can configurate which path are they need token.
+        http
+                .authorizeRequests()
+                .antMatchers("/uplus_example/client/order").hasRole(role_1)
+                // .antMatchers("/uplus_example/client/hello").hasRole("USER")
+                .and().httpBasic();
     }
 }

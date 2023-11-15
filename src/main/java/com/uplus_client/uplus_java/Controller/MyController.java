@@ -27,29 +27,35 @@ public class MyController {
     public MyController(){
 
     }
-    /* @PostMapping("/admit")
+
+    @PostMapping("/admit")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> onAdmitController(){
         return admitService.onAdmitService();
     }
+
     @PostMapping("/discharge")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> onDischargeController(){
         return dischargeService.onDischargeService();
-    } */
-    @PostMapping("/monitorInterface")
+    }
+
+    /* @PostMapping("/monitorInterface")
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onMonitorInterfaceController(){
         return admitService.OnMonitorInterfaceService();
-    }
+    } */
+
     @PostMapping("/order")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> onOrderController(){
         return orderService.OnOrderService();
     }
-    @GetMapping("/summary")
+
+    /* @GetMapping("/summary")
     @ResponseBody
     public ResponseEntity<LinkedHashMap<String, String>> onSummaryOrderController(){
         return admitService.OnSummaryOrderService();
-    }
+    } */
+    
 }
