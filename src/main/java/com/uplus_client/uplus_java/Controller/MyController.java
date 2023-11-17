@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.uplus_client.uplus_java.Service.AdmitService;
-import com.uplus_client.uplus_java.Service.DischargeService;
-import com.uplus_client.uplus_java.Service.OrderService;
+import com.uplus_client.uplus_java.Service.U_Plus.AdmitService;
+import com.uplus_client.uplus_java.Service.U_Plus.DischargeService;
+import com.uplus_client.uplus_java.Service.U_Plus.OrderService;
 
 @CrossOrigin
 @RestController
@@ -28,17 +28,17 @@ public class MyController {
 
     }
 
-    @PostMapping("/admit")
+    /* @PostMapping("/admit")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> onAdmitController(){
         return admitService.onAdmitService();
-    }
+    } */
 
-    @PostMapping("/discharge")
+    /* @PostMapping("/discharge")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> onDischargeController(){
         return dischargeService.onDischargeService();
-    }
+    } */
 
     /* @PostMapping("/monitorInterface")
     @ResponseBody

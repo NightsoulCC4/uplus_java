@@ -1,14 +1,9 @@
 package com.uplus_client.uplus_java.Repository.IMED;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
+import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +21,8 @@ public class DischargeRepository {
     @Value("${his.datasource.password}")
     private String hisDatasourcePassword;
 
+    Logger log = LogManager.getLogger(DischargeRepository.class);
+
     public DischargeRepository(){
         
     }
@@ -38,37 +35,32 @@ public class DischargeRepository {
         ResultSet rs = null;
 
         String query = "SELECT " +
-                            "DISTINCT " + 
-                            "format_hn(patient.hn) AS hn_number, " + 
-                            "bed_management.bed_number AS room_number, " +
-                            "bed_management.base_service_point_id AS ward, " +
-                            "visit.financial_discharge AS discharge_notify, " +
-                            "visit.financial_discharge_date AS discharge_date, " +
-                            "visit.financial_discharge_time AS discharge_time " +
-                        "FROM " +
-                            "patient " +
-                        "INNER JOIN visit visit ON " +
-                            "patient.patient_id = visit.patient_id " +
-                        "INNER JOIN vital_sign_opd vital_sign_opd ON " +
-                            "visit.visit_id = vital_sign_opd.visit_id " +
-                        "INNER JOIN nt_patient_nutrition nt_patient_nutrition ON " +
-                            "nt_patient_nutrition.patient_id = patient.patient_id " +
-                        "INNER JOIN nt_allergy nt_allergy ON " +
-                            "nt_allergy.nt_patient_nutrition_id = nt_patient_nutrition.nt_patient_nutrition_id " +
-                        "INNER JOIN diagnosis_icd10 diagnosis_icd10 ON " +
-                            "diagnosis_icd10.visit_id = visit.visit_id " +
-                        "INNER JOIN admit admit ON " +
-                            "admit.patient_id = patient.patient_id " +
-                        "INNER JOIN bed_management bed_management ON " +
-                            "bed_management.admit_id = admit.admit_id " +
-                        "INNER JOIN base_service_point base_service_point ON " +
-                            "base_service_point.base_department_id = admit.base_department_id " +
-                        "INNER JOIN ipd_attending_physician ipd_attending_physician ON " +
-                            "ipd_attending_physician.admit_id = admit.admit_id " +
-                        "WHERE " +
-                            "visit.financial_discharge = '1' " +
-                        "ORDER BY " +
-                            "discharge_date DESC ";
+                       "     format_hn(patient.hn) AS hn_number, " + 
+                       "     bed_management.room_number AS room_number," +
+                       "     base_service_point.description AS ward, " +
+                       "     visit.financial_discharge AS discharge_notify, " +
+                       "     visit.financial_discharge_date AS discharge_date, " +
+                       "     visit.financial_discharge_time AS discharge_time" +
+                       " FROM " +
+                       "     patient " +
+                       " INNER JOIN visit visit ON " +
+                       "     patient.patient_id = visit.patient_id " +
+                       " INNER JOIN admit admit ON " +
+                       "     admit.visit_id = visit.visit_id " +
+                       " INNER JOIN bed_management bed_management ON " +
+                       "     bed_management.admit_id = admit.admit_id " +
+                       " INNER JOIN base_service_point base_service_point ON " +
+                       "     base_service_point.ward_code = bed_management.ward_code " +
+                       " INNER JOIN base_room base_room ON " +
+                       "     base_room.base_room_id = bed_management.base_room_id " +
+                       " WHERE " +
+                       "     visit.financial_discharge = '1' " +
+                       " AND " +
+                       "     bed_management.current_bed = '1' " +
+                       " AND " +
+                       "     base_service_point.active = '1' " +
+                       " ORDER BY " +
+                       "     discharge_date DESC;"; 
 
         try {
             con = DriverManager.getConnection(hisDatasourceJdbcUrl, hisDatasourceUsername, hisDatasourcePassword);

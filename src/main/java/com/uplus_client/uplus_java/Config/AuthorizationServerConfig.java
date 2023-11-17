@@ -6,7 +6,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 
-import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -53,19 +52,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Value("${spring.security.user.password.client_1}")
     private String password_1;
 
-    @Value("${spring.security.user.name.client_2}")
-    private String user_2;
-
-    @Value("${spring.security.user.password.client_2}")
-    private String password_2;
-
     @Value("${spring.security.user.authorities.role_1}")
     private String role_1;
-
-    @Value("${spring.security.user.authorities.role_2}")
-    private String role_2;
-
-    private final static Logger logger = LogManager.getLogger(AuthorizationServerConfig.class);
 
     private AuthenticationManager authenticationManager;
 
@@ -89,18 +77,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-          .withUser(user_1).password(passwordEncoder().encode(password_1)).roles(role_1)
-          .and()
-          .withUser(user_2).password(passwordEncoder().encode(password_2)).roles(role_2);
+          .withUser(user_1).password(passwordEncoder().encode(password_1)).roles(role_1);
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
-        logger.info("\n client-id: " + client_id + "\n client-secret: " + client_secret + "\n grant_types: "
-                + password + ", " + authoization_code + ", " + refresh_token + "\n scope: " + read + ", " + write
-                + "\n validateTime: " + accessTokenValiditySeconds);
-
         // If you want to encode the client_secret, you can use passwordEncoder() function nor insert "{noop}" at the front.
         clients.inMemory()
                 .withClient(client_id)
@@ -108,12 +89,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes(password, authoization_code, refresh_token)
                 .scopes(read, write)
                 .accessTokenValiditySeconds(accessTokenValiditySeconds);
-                /* .and()
-                .withClient("client2")
-                .secret("{noop}secret2")
-                .authorizedGrantTypes(client_credentials, refresh_token, password)
-                .scopes(read, write)
-                .accessTokenValiditySeconds(300); */
     }
 
     @Bean

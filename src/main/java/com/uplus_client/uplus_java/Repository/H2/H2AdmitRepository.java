@@ -1,20 +1,15 @@
 package com.uplus_client.uplus_java.Repository.H2;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.uplus_client.uplus_java.Utility.Utility;
 
 @Repository
-public class H2Repository {
+public class H2AdmitRepository {
 
     @Value("${spring.datasource.url}")
     private String h2_url;
@@ -25,25 +20,22 @@ public class H2Repository {
     @Value("${spring.datasource.password}")
     private String h2_password;
 
-    Logger log = LogManager.getLogger(H2Repository.class);
+    Logger log = LogManager.getLogger(H2AdmitRepository.class);
 
-    H2Repository() {
+    H2AdmitRepository() {
 
     }
 
-    public String getBackupData() {
+    public String getAdmitBackupData() {
         String list = null;
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        log.info("\nURL: " + h2_url);
-
         String query = "SELECT " +
-                "           json_data, " +
-                "           time " +
+                "           admit_dataset, " +
                 "       FROM " +
-                "           json_data_table " +
+                "           admit_backup " +
                 "       ORDER BY " +
                 "           time DESC " +
                 "       LIMIT 1;";
@@ -55,7 +47,7 @@ public class H2Repository {
             rs = ps.executeQuery();
 
             if (rs.next())
-                list = rs.getString("JSON_DATA");
+                list = rs.getString("admit_dataset");
 
             con.close();
             con = null;
@@ -76,14 +68,14 @@ public class H2Repository {
         return list;
     }
 
-    public boolean putBackupData(String json) {
+    public boolean putAdmitBackupData(String json) {
         Connection con = null;
         PreparedStatement ps = null;
 
         String query = "INSERT INTO " +
-                "           JSON_DATA_TABLE " +
+                "           admit_backup " +
                 "       ( " +
-                "           json_data, " +
+                "           admit_dataset, " +
                 "           time " +
                 "       ) " +
                 "       VALUES " +

@@ -1,16 +1,9 @@
 package com.uplus_client.uplus_java.Repository.IMED;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -40,8 +33,6 @@ public class AdmitRepository {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-
-        log.info("\nURL : " + hisDatasourceJdbcUrl);
 
         String query = "SELECT " +
                 "           format_hn(patient.hn) AS hn_number, " +
@@ -96,7 +87,7 @@ public class AdmitRepository {
                 "       INNER JOIN public.nt_patient_nutrition nt_patient_nutrition ON " +
                 "           nt_patient_nutrition.patient_id = patient.patient_id " +
                 "       INNER JOIN admit admit ON " +
-                "           admit.patient_id = patient.patient_id " +
+                "           admit.visit_id = visit.visit_id " +
                 "       INNER JOIN public.vital_sign_ipd vital_sign_ipd ON " +
                 "           admit.admit_id = vital_sign_ipd.admit_id " +
                 "       INNER JOIN bed_management bed_management ON " +
@@ -196,7 +187,7 @@ public class AdmitRepository {
                 "           employee.firstname, " +
                 "           employee.lastname " +
                 "       ORDER BY " +
-                "           admit.admit_date DESC; ";
+                "           admit.admit_date DESC;";
 
         try {
             con = DriverManager.getConnection(hisDatasourceJdbcUrl, hisDatasourceUsername, hisDatasourcePassword);

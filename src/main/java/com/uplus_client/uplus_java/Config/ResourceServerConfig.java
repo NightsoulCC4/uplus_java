@@ -24,7 +24,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/uplus_example/client/order").hasRole(role_1)
-                // .antMatchers("/uplus_example/client/hello").hasRole("USER")
                 .and().httpBasic();
     }
 }
