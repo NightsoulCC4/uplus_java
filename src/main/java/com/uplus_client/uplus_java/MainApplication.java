@@ -19,6 +19,9 @@ import com.uplus_client.uplus_java.Service.U_Plus.DischargeService;
 @SpringBootApplication
 public class MainApplication {
 
+	private boolean is_token_expire = true;
+	private String access_token = null;
+
 	@Autowired
 	AdmitService admitService;
 
@@ -39,8 +42,6 @@ public class MainApplication {
 		log.info("\nSent data at: " + LocalDateTime.now());
 		try {
 
-			boolean is_token_expire = true;
-			String access_token = null;
 			Map<String, Object> token = null;
 
 			// Check token expire.
@@ -53,6 +54,7 @@ public class MainApplication {
 			// Check 401 Unauthorized.
 			if (!admitService.onAdmitService(access_token).getStatusCode().toString().equals("200 OK")
 					|| !dischargeService.onDischargeService(access_token).getStatusCode().toString().equals("200 OK")) {
+				log.info("\n Some data changed.");
 				token = requestTokenService.requestToken();
 				is_token_expire = true;
 			}
