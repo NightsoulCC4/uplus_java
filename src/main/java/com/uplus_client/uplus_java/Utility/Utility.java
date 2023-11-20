@@ -94,16 +94,10 @@ public final class Utility {
     }
 
     public static List<Map<String, Object>> StringToMap(String data) {
-        // Create a Gson instance.
         Gson gson = new Gson();
-
-        // Define the type for the Map.
         Type type = new TypeToken<List<Map<String, Object>>>() {
         }.getType();
 
-        // Convert the JSON string to a Map.
-        List<Map<String, Object>> resultMap = gson.fromJson(data, type);
-
-        return resultMap;
+        return gson.fromJson(data, type);
     }
 }

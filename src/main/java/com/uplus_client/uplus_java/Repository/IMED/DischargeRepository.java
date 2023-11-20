@@ -59,6 +59,8 @@ public class DischargeRepository {
                        "     bed_management.current_bed = '1' " +
                        " AND " +
                        "     base_service_point.active = '1' " +
+                       " AND " +
+                       "     admit.admit_date = current_date::TEXT" +
                        " ORDER BY " +
                        "     discharge_date DESC;"; 
 

@@ -41,12 +41,12 @@ public class AdmitRepository {
                        "     patient.lastname, " +
                        "     patient.birthdate AS date_of_birth, " +
                        "     CASE " +
-                       "         WHEN vital_sign_opd.height <> '' THEN vital_sign_opd.height " +
+                       "         WHEN vital_sign_opd.height <> '' THEN vital_sign_opd.height || ' เซนติเมตร'" +
                        "         ELSE " +
                        "             'N/A' " +
                        "     END AS height, " +
                        "     CASE " +
-                       "         WHEN vital_sign_opd.weight <> '' THEN vital_sign_opd.weight " +
+                       "         WHEN vital_sign_opd.weight <> '' THEN vital_sign_opd.weight || ' กิโลกรัม'" +
                        "         ELSE " +
                        "             'N/A' " +
                        "     END AS weight, " +
@@ -152,6 +152,8 @@ public class AdmitRepository {
                        "         AND base_service_point.active = '1' " +
                        "         AND ipd_attending_physician.priority = '1' " +
                        "         AND ipd_attending_physician.is_current = '1' " +
+                       "         AND visit.financial_discharge = '0' " +
+                       "         AND admit.admit_date = current_date::TEXT" +
                        "         AND (bed_management.arrival_date) IN ( " +
                        "         SELECT " +
                        "             max(bed_management.arrival_date) " +
@@ -214,8 +216,8 @@ public class AdmitRepository {
                 lnkMap.put("birth_month", Utility.getMonthFromDate(rs.getString("date_of_birth")));
                 lnkMap.put("birth_year", Utility.getYearFromDate(rs.getString("date_of_birth")));
                 lnkMap.put("birth_date", Utility.getBirthDateISO(rs.getString("date_of_birth")));
-                lnkMap.put("height", rs.getString("height").equals("")? "" : rs.getString("height") + " เซนติเมตร");
-                lnkMap.put("weight", rs.getString("weight").equals("")? "" : rs.getString("weight") + " กิโลกรัม");
+                lnkMap.put("height", rs.getString("height"));
+                lnkMap.put("weight", rs.getString("weight"));
                 lnkMap.put("nationality", rs.getString("nationality"));
                 lnkMap.put("citizenship", rs.getString("citizenship"));
                 lnkMap.put("religion", rs.getString("religion"));
