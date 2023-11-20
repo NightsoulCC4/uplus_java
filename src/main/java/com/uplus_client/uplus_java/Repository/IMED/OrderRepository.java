@@ -38,22 +38,22 @@ public class OrderRepository {
         ResultSet rs = null;
 
         String query = "SELECT " +
-                "           format_hn(patient.hn) AS hn_number, " +
+                "           format_hn(patient.hn) AS hn_number, " + 
                 "           bed_management.room_number AS room_number, " +
                 "           base_service_point.description AS ward, " +
                 "           base_nt_type.description AS diet_type, " +
                 "           nt_patient_nutrition.note AS processing_note, " +
-                "           nt_patient_nutrition.extra_note AS remark, " +
-                "           ipd_attending_physician.employee_id AS doctor_name, " +
+                "           nt_patient_nutrition.extra_note AS remark, " + 
+                "           employee.prename || employee.firstname || ' ' || employee.lastname AS doctor_name, " +
                 "           string_agg( " +
-                "                   diagnosis_icd10.beginning_diagnosis::TEXT, " +
-                "                   ', ' " +
-                "               ORDER BY  " +
-                "                   diagnosis_icd10.diagnosis_icd10_id " +
+                "               diagnosis_icd10.beginning_diagnosis::TEXT, " +
+                "               ', ' " +
+                "               ORDER BY " +
+                "                    diagnosis_icd10.diagnosis_icd10_id " +
                 "           ) AS diagnosis, " +
                 "           string_agg( " +
-                "                   nt_allergy.base_nt_allergy_id::TEXT, " +
-                "                   ', ' " +
+                "               nt_allergy.base_nt_allergy_id::TEXT, " +
+                "               ', ' " +
                 "               ORDER BY " +
                 "                   nt_allergy.nt_allergy_id " +
                 "           ) AS allergy, " +
@@ -73,6 +73,8 @@ public class OrderRepository {
                 "           nt_patient_nutrition.patient_id = patient.patient_id " +
                 "       INNER JOIN public.ipd_attending_physician ipd_attending_physician ON " +
                 "           ipd_attending_physician.admit_id = admit.admit_id " +
+                "       INNER JOIN employee employee ON " +
+                "           ipd_attending_physician.employee_id = employee.employee_id " +
                 "       INNER JOIN public.diagnosis_icd10 diagnosis_icd10 ON " +
                 "           diagnosis_icd10.visit_id = visit.visit_id " +
                 "       INNER JOIN public.nt_allergy nt_allergy ON " +
@@ -81,18 +83,18 @@ public class OrderRepository {
                 "           visit.visit_id = nt_order.visit_id " +
                 "       INNER JOIN public.base_nt_type base_nt_type ON " +
                 "           nt_patient_nutrition.base_nt_type_id = base_nt_type.base_nt_type_id " +
-                "       INNER JOIN public.base_nt_food_type base_nt_food_type ON " +
+                "       INNER JOIN public.base_nt_food_type base_nt_food_type ON " + 
                 "           nt_order.base_nt_food_type_id = base_nt_food_type.base_nt_food_type_id " +
                 "       INNER JOIN public.base_service_point base_service_point ON " +
-                "           bed_management.ward_code = base_service_point.ward_code " +
+                "           bed_management.ward_code = base_service_point.ward_code " + 
                 "       WHERE " +
                 "           diagnosis_icd10.fix_diagnosis_type_id = '1' " +
                 "       AND " +
                 "           ipd_attending_physician.priority = '1' " +
                 "       AND " +
                 "           bed_management.current_bed = '1' " +
-                "       AND " +
-                "           admit.active = '1' " +
+                "       AND " + 
+                "           admit.active = '1' " + 
                 "       GROUP BY " +
                 "           patient.hn, " +
                 "           bed_management.room_number, " +
@@ -100,7 +102,9 @@ public class OrderRepository {
                 "           base_nt_type.description, " +
                 "           nt_patient_nutrition.note, " +
                 "           nt_patient_nutrition.extra_note, " +
-                "           ipd_attending_physician.employee_id, " +
+                "           employee.prename, " +
+                "           employee.firstname, " +
+                "           employee.lastname, " +
                 "           diagnosis_icd10.beginning_diagnosis, " +
                 "           base_nt_food_type.description, " +
                 "           nt_order.fix_order_status_id, " +
