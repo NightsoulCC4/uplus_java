@@ -12,6 +12,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 
+// Other request route (Exist in document, but not confirm from customer).
 public class Other {
 
     @Value("${endpoint}")

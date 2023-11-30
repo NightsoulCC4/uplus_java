@@ -57,16 +57,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     private AuthenticationManager authenticationManager;
 
+    // Constructor.
     @Autowired
     public AuthorizationServerConfig(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
+    // Configure the endpoint.
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.authenticationManager(authenticationManager);
     }
 
+    // Grant token access.
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.tokenKeyAccess("permitAll()")
@@ -74,12 +77,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .allowFormAuthenticationForClients();
     }
 
+    // Configure token for each user for store in memory.
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
           .withUser(user_1).password(passwordEncoder().encode(password_1)).roles(role_1);
     }
 
+    // Configure the client-id and client-secret to generate token.
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         // If you want to encode the client_secret, you can use passwordEncoder() function nor insert "{noop}" at the front.
@@ -91,6 +96,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenValiditySeconds(accessTokenValiditySeconds);
     }
 
+    // Encode the password from text to md-5.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();

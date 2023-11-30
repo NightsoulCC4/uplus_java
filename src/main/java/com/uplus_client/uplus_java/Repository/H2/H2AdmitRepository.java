@@ -26,6 +26,7 @@ public class H2AdmitRepository {
 
     }
 
+    // Get back up admit data for comparing to the current data.
     public String getAdmitBackupData() {
         String list = null;
         Connection con = null;
@@ -68,6 +69,7 @@ public class H2AdmitRepository {
         return list;
     }
 
+    // Insert admit data if the data changed.
     public boolean putAdmitBackupData(String json) {
         Connection con = null;
         PreparedStatement ps = null;

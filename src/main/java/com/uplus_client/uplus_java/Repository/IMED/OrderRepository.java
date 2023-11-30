@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.uplus_client.uplus_java.Utility.Utility;
 
+// Get order data from database.
 @Repository
 public class OrderRepository {
 

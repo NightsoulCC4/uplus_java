@@ -13,6 +13,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Value("${spring.security.user.authorities.role_1}")
     private String role_1;
 
+    // Configure which route can be able to access with token.
     @Override
     public void configure(HttpSecurity http) throws Exception {
 

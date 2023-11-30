@@ -50,11 +50,12 @@ public class ProviderUtility {
 
     }
 
+    // Request token.
     public Map<String, Object> tokenProvider(String endpoint, String method) {
         Map<String, Object> response = new LinkedHashTreeMap<>();
 
         try {
-
+            // Use OkHttpclient to send the request.
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
             // MediaType mediaType = MediaType.parse("text/plain");
@@ -97,6 +98,7 @@ public class ProviderUtility {
         return response;
     }
 
+    // Request the provider Components.
     public Map<String, Object> provider(String endpoint, String reqBody, String method, String access_token) {
         Map<String, Object> response = new LinkedHashTreeMap<>();
 

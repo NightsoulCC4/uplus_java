@@ -16,6 +16,7 @@ import com.uplus_client.uplus_java.Repository.IMED.DischargeRepository;
 import com.uplus_client.uplus_java.Utility.ProviderUtility;
 import com.uplus_client.uplus_java.Utility.Utility;
 
+// Request discharge data in service layer.
 @Service
 public class DischargeService {
     @Value("${endpoint}")

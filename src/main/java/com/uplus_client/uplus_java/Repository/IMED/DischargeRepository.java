@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.uplus_client.uplus_java.Utility.Utility;
 
+// Get discharge data from database.
 @Repository
 public class DischargeRepository {
 

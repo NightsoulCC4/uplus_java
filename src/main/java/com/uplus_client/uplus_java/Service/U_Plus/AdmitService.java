@@ -15,6 +15,7 @@ import com.uplus_client.uplus_java.Repository.IMED.AdmitRepository;
 import com.uplus_client.uplus_java.Utility.ProviderUtility;
 import com.uplus_client.uplus_java.Utility.Utility;
 
+// Request admit data in service layer.
 @Service
 public class AdmitService {
 

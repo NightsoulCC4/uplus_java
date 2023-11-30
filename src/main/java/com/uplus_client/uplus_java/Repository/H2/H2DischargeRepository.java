@@ -25,6 +25,7 @@ public class H2DischargeRepository {
 
     }
 
+    // Get back up discharge data for comparing to the current data.
     public String getDischargeBackupData() {
         String list = null;
         Connection con = null;
@@ -67,6 +68,7 @@ public class H2DischargeRepository {
         return list;
     }
 
+    // Insert discharge data if the data changed.
     public boolean putDischargeBackupData(String json) {
         Connection con = null;
         PreparedStatement ps = null;

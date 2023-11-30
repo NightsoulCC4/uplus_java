@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // Configure security.
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {

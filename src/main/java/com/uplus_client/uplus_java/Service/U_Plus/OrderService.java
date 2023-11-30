@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 import com.uplus_client.uplus_java.Repository.IMED.OrderRepository;
 import com.uplus_client.uplus_java.Utility.Utility;
 
-
+//Request order data in service layer.
 @Service
 public class OrderService {
     @Value("${endpoint}")
